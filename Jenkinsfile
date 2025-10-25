@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Loksjain/flask-cicd.git'
+                git branch: 'main', url: 'https://github.com/Loksjain/python_cicd.git'
             }
         }
 
