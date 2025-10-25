@@ -22,17 +22,18 @@ pipeline {
 }
 
         stage('Push to Docker Hub') {
-            steps {
-                script {
-                    sh """
-                        echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                        docker push ${IMAGE_NAME}:${BUILD_NUMBER}
-                        docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest
-                        docker push ${IMAGE_NAME}:latest
-                    """
-                }
-            }
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                          usernameVariable: 'DOCKERHUB_USER',
+                                          passwordVariable: 'DOCKERHUB_PASS')]) {
+            sh '''
+            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+            docker push loksjain25/flask-cicd:5
+            '''
         }
+    }
+}
+
 
         stage('Deploy to Kubernetes') {
             steps {
