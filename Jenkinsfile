@@ -36,17 +36,15 @@ pipeline {
 
 
         stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
-                        kubectl config use-context docker-desktop
-                        kubectl set image deployment/flask-app flask-app=${IMAGE_NAME}:${BUILD_NUMBER} -n demo
-                        kubectl rollout status deployment/flask-app -n demo
-                        """
-                    }
-                }
-            }
+    steps {
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            sh '''
+                kubectl config use-context docker-desktop
+                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f k8s/service.yaml
+            '''
         }
+    }
+}
     }
 }
