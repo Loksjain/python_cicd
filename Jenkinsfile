@@ -14,12 +14,12 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                script {
-                    sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
-                }
-            }
+    steps {
+        script {
+            sh 'docker build -t loksjain25/flask-cicd:5 -f app/Dockerfile .'
         }
+    }
+}
 
         stage('Push to Docker Hub') {
             steps {
